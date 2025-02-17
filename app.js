@@ -3,23 +3,12 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/addProduct', (req, res, next) => {
-  res.send(
-    '<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>'
-  );
-});
-
-//To speicify the method, we can replace app.use with app.get/post/put/delete
-app.post('/product', (req, res, next) => {
-  console.log(req.body);
-  res.redirect('/');
-});
-
-app.use('/', (req, res, next) => {
-  console.log('In another middleware!');
-  res.send('<h1>Hello from Express!</h1>');
-});
+app.use(adminRoutes);
+app.use(shopRoutes);
 
 app.listen(3000);
