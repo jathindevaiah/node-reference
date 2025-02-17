@@ -1,8 +1,25 @@
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const routes = require('./routes');
+const app = express();
 
-console.log(routes.someText);
-const server = http.createServer(routes.handler);
+app.use(bodyParser.urlencoded({ extended: false }));
 
-server.listen(3000);
+app.use('/addProduct', (req, res, next) => {
+  res.send(
+    '<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>'
+  );
+});
+
+//To speicify the method, we can replace app.use with app.get/post/put/delete
+app.post('/product', (req, res, next) => {
+  console.log(req.body);
+  res.redirect('/');
+});
+
+app.use('/', (req, res, next) => {
+  console.log('In another middleware!');
+  res.send('<h1>Hello from Express!</h1>');
+});
+
+app.listen(3000);
